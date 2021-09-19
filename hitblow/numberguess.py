@@ -4,7 +4,7 @@ import itertools
 
 class Numberguess:
 
-    def __init__(self,max_count=100,ans=None) -> None:
+    def __init__(self,max_count=500,ans=None) -> None:
         self.max_count = max_count
         self.digits = 5
         self.count = 0
@@ -50,18 +50,18 @@ class Numberguess:
 
 
     def _play_game_manual(self) -> None:
-        while self.count < self.max_count:
+        for self.count in range(self.max_count):
             print("残りの入力回数は{}回です".format(self.max_count-self.count))
             self.num = self._get_your_num()
             self.history.append(self.num)
             self.count += 1 
             self._show_hit_blow()
             print("!!  {} Hit, {} Blow  !!".format(self.hit,self.blow))
-            if self.hit == 5:
+            if self.hit == self.digits:
                 print("!! 正解です !!")
                 break
 
-    def _first_three_times(self):
+    def _first_three_times(self) -> None:
         search_list = ["01234","56789","abcde"]
         for i in range(3):
             print("残りの入力回数は{}回です".format(self.max_count-self.count))
@@ -72,11 +72,11 @@ class Numberguess:
             self.list_where_num_is.append(self.hit + self.blow)
             print("-----",self.num)
             print("!!  {} Hit, {} Blow  !!".format(self.hit,self.blow))
-            if self.hit == 5:
+            if self.hit == self.digits:
                 print("!! 正解です !!")
                 break
 
-    def _search_5_combination(self):
+    def _identify_5_combination(self) -> None:
         for i in itertools.combinations("01234", self.list_where_num_is[0]):
             for j in itertools.combinations("56789", self.list_where_num_is[1]):
                 for k in itertools.combinations("abcde", self.list_where_num_is[2]):
@@ -88,26 +88,43 @@ class Numberguess:
                         self._show_hit_blow()
                         print("-----",self.num)
                         print("!!  {} Hit, {} Blow  !!".format(self.hit,self.blow))
-                        if self.hit == 5:
+                        if self.hit == self.digits:
                             print("!! 正解です !!")
                             break
-                        elif self.hit + self.blow == 5:
+                        elif self.hit + self.blow == self.digits:
                             self.list_ans_num = [i for i in self.num]
                             break
-                    if self.hit + self.blow == 5:
+                        elif self.hit + self.blow == self.digits-1:
+                            self._sum_hitblow_4()
+                            break
+                    if self.hit + self.blow == self.digits:
                         break
-                if self.hit + self.blow == 5:
+                if self.hit + self.blow == self.digits:
                     break
-            if self.hit + self.blow == 5:
+            if self.hit + self.blow == self.digits:
                 break
 
-    # def _sum_hitblow_4(self):
-    #     for i in self.num:
-    #         for j in list(set(self.List_16) ^ set(list(self.num))):
-    #             new_num = 
+    def _sum_hitblow_4(self):
+        num_set = set(self.num)
+        for i in itertools.combinations(num_set, 4):
+            for j in itertools.combinations(list(set(self.List_16) ^ set(num_set)),1):
+                print("残りの入力回数は{}回です".format(self.max_count-self.count))
+                self.num = "".join(i+j)
+                self.history.append(self.num)
+                self.count += 1 
+                self._show_hit_blow()
+                print("!!  {} Hit, {} Blow  !!".format(self.hit,self.blow))
+                if self.hit == self.digits:
+                    print("!! 正解です !!")
+                    break
+                elif self.hit + self.blow == self.digits:
+                    self.list_ans_num = [i for i in self.num]
+                    break
+            if self.hit + self.blow == self.digits:
+                break
 
 
-    def _determine_permutation(self):
+    def _identify_permutation(self) -> None:
         for i in itertools.permutations(self.list_ans_num, self.digits):
             print("残りの入力回数は{}回です".format(self.max_count-self.count))
             self.num = "".join(i)
@@ -116,18 +133,18 @@ class Numberguess:
             self._show_hit_blow()
             print("-----",self.num)
             print("!!  {} Hit, {} Blow  !!".format(self.hit,self.blow))
-            if self.hit == 5:
+            if self.hit == self.digits:
                 print("!! 正解です !!")
                 break
 
     
-    def _play_game_auto(self):
+    def _play_game_auto(self) -> None:
         self._first_three_times()
-        self._search_5_combination()
-        self._determine_permutation()
+        self._identify_5_combination()
+        self._identify_permutation()
 
 
-    def run(self, mode="auto") -> Tuple[int,List[int]]:
+    def run(self, mode="auto") -> None:
         """ 数当てゲーム実行ランナー
         : param str mode : ゲームの実行モード("manual","linear","binary")
         : rtype : None
