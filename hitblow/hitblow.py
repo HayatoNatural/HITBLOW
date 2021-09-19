@@ -6,13 +6,13 @@ def get_parser() -> argparse.Namespace:
 
     """
     parser = argparse.ArgumentParser(description="Hit&Blow, 数当てゲーム")
-    parser.add_argument("--max_count",default=700)
+    parser.add_argument("--max_count",default=500)
     parser.add_argument("--ans")
     parser.add_argument("--mode",default="auto")
     args = parser.parse_args()
     return args
 
-def main():
+def main() -> None:
     """数当てゲームのメイン
     """
     args = get_parser()
