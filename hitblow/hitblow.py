@@ -6,7 +6,7 @@ def get_parser() -> argparse.Namespace:
 
     """
     parser = argparse.ArgumentParser(description="Hit&Blow, 数当てゲーム")
-    parser.add_argument("--max_count",default=500)
+    parser.add_argument("--max_count",default=250)
     parser.add_argument("--ans")
     parser.add_argument("--mode",default="auto")
     args = parser.parse_args()
@@ -25,7 +25,7 @@ def main() -> None:
         runner = Numberguess(max_count=max_count)
 
     runner.run(mode=mode)
-    # print(runner.list_ans_num)
+    print(runner.list_where_num_is)
 
 if __name__ == "__main__":
     main()
